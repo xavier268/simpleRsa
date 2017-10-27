@@ -20,7 +20,7 @@ public abstract class Key {
     protected BigInteger exponent;
     protected BigInteger pubKey;
 
-    protected MessageDigest md;
+    private MessageDigest md;
 
     {
         try {
@@ -28,5 +28,14 @@ public abstract class Key {
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    /**
+     * BigInteger derived from the hash, that is in the mod interval.
+     * @param message
+     * @return 
+     */
+    protected BigInteger digest(String message) {
+        return new BigInteger(message.getBytes()).mod(pubKey);
     }
 }

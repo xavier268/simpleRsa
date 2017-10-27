@@ -47,19 +47,29 @@ public class RSATest {
     public void encryptDecrypt() {
 
         BigInteger m = new BigInteger("321654654654");
-
         BigInteger c = p.encrypt(m);
-
         assertEquals(m, s.decrypt(c));
-
         assertNotEquals(c, m);
+    }
+
+    @Test
+    /**
+     * Decrypt-encrypt will fail if input is onot greater or equal to 0
+     * and strictly smaller than public modulus.
+     */
+    public void decryptEncryptNegative() {
+
+        BigInteger m = new BigInteger("-321654654654");
+        BigInteger c = s.decrypt(m);
+        assertNotEquals(m, p.encrypt(c));
+        
     }
 
     @Test
     public void signVerify() {
 
         BigInteger m = new BigInteger("3546654444444654");
-        String message = "this is a test message for signature";        
+        String message = "this is a test message for signature";
 
         BigInteger signature = s.sign(message);
 

@@ -32,8 +32,8 @@ public class PublicKey extends Key {
      * @return true if signature is valid.
      */
     public boolean verify(BigInteger signature, String message) {
-        byte[] digest = md.digest(message.getBytes());        
-        return (new BigInteger(digest)).equals(encrypt(signature));
+        BigInteger d = digest(message); 
+        return d.equals(encrypt(signature));
     }
 
 }

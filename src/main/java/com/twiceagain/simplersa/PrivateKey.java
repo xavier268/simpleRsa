@@ -17,11 +17,11 @@ import java.util.Random;
  */
 public class PrivateKey extends Key {
 
-    private final BigInteger a;
-    private final BigInteger b;
+    private BigInteger a;
+    private BigInteger b;
     private final Random rnd = new Random();
 
-    private final BigInteger secretExponent;
+    private BigInteger secretExponent;
 
     /**
      * Generate a new private key.
@@ -30,14 +30,23 @@ public class PrivateKey extends Key {
      * @param exponent
      */
     public PrivateKey(int nbBits, BigInteger exponent) {
-        a = BigInteger.probablePrime(nbBits, rnd);
-        b = BigInteger.probablePrime(nbBits, rnd);
-        this.exponent = exponent;
-        this.pubKey = a.multiply(b);
+        boolean done = false;
 
-        // now, compute the inverse of the exponent modulo a-1 x b-1
-        secretExponent = exponent.modInverse(a.subtract(BigInteger.ONE).multiply(b.subtract(BigInteger.ONE)));
-
+        while (!done) {
+            try {
+                a = BigInteger.probablePrime(nbBits, rnd);
+                b = BigInteger.probablePrime(nbBits, rnd);
+                this.exponent = exponent;
+                this.pubKey = a.multiply(b);
+                // now, compute the inverse of the exponent modulo a-1 x b-1
+                // It is sometimes impossible to compute the inverse, if exponent is not invertible in that field. 
+                // In such case, we should modify the factors, and try again ...            
+                secretExponent = exponent.modInverse(a.subtract(BigInteger.ONE).multiply(b.subtract(BigInteger.ONE)));
+                done = true;
+            } catch (ArithmeticException ex) {
+                System.out.printf("\n****\nExponent not invertible - choosing another value ...\n*****\n");
+            }
+        }
     }
 
     /**
@@ -61,8 +70,8 @@ public class PrivateKey extends Key {
      * @return
      */
     public BigInteger sign(String message) {
-        byte[] digest = md.digest(message.getBytes());
-        return decrypt(new BigInteger(digest));
+        BigInteger d = digest(message);
+        return decrypt(d);
 
     }
 
