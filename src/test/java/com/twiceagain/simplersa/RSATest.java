@@ -5,7 +5,10 @@
  */
 package com.twiceagain.simplersa;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -87,6 +90,18 @@ public class RSATest {
     @Test(expected = RuntimeException.class)
     public void exponentEquals2() {
         PrivateKey sec = new PrivateKey(50, new BigInteger("2"));
+    }
+
+    @Test
+    public void saveKeys() throws IOException {
+
+        Files.deleteIfExists(Paths.get("test.pub"));
+        System.out.printf("\n-----Saved %s", p.save("test.pub"));
+        Files.deleteIfExists(Paths.get("test.sec"));
+        System.out.printf("\n-----Saved %s", s.save("test.sec"));
+        
+        System.out.println();
+
     }
 
 }

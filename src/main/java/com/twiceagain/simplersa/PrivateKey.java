@@ -5,7 +5,12 @@
  */
 package com.twiceagain.simplersa;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 /**
@@ -101,6 +106,27 @@ public class PrivateKey extends Key {
      */
     public void invalidate() {
         secretExponent = null;
+    }
+
+    /**
+     * Save to file name (relative or absolute).
+     *
+     * @param filename
+     * @return Absolute file path used.
+     * @throws java.io.IOException
+     */
+    public String save(String filename) throws IOException {
+        Path p = Paths.get(filename);
+        if (Files.exists(p)) {
+            throw new IOException("You cannot save to "
+                    + p.toAbsolutePath()
+                    + " because file already exists.");
+        }
+        String s = exponent.toString() + "\n"
+                + pubKey.toString() + "\n"
+                + secretExponent.toString() + "\n";
+        Files.write(p, s.getBytes(), StandardOpenOption.CREATE);
+        return p.toAbsolutePath().toString();
     }
 
 }
