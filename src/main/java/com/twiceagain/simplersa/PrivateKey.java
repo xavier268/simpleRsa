@@ -21,7 +21,10 @@ import java.util.Random;
  * @author xavier
  */
 public class PrivateKey extends Key implements Comparable<PrivateKey> {
-
+    
+    /**
+     * This is the most sensitive component.
+     */
     private BigInteger secretExponent;
 
     /**
