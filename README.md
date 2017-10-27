@@ -1,5 +1,6 @@
 # simpleRsa
-A simple, naive,  strong public key cryptography implementation (RSA) in java, using only standadrd librairy.
+A simple, naive, strong public key cryptography implementation (RSA) in java, 
+using only standadrd librairy.
 
 ## How to use/test
 
@@ -13,3 +14,5 @@ then, either :
 or :
 * sign with the private key, 
 * verify with the public key
+
+See the unit tests as an example. **Do not use in production !**
