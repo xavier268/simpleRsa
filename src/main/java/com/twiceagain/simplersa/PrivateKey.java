@@ -31,12 +31,17 @@ public class PrivateKey extends Key {
      * Generate a new private key.
      *
      * @param nbBits
-     * @param exponent - should be prime, or throw Runtime Exception.
+     * @param exponent - should be prime, greater or equals to 3, or will throw
+     * Runtime Exception.
      */
     public PrivateKey(int nbBits, BigInteger exponent) {
 
         BigInteger a;
         BigInteger b;
+
+        if (exponent.equals(new BigInteger("2"))) {
+            throw new RuntimeException("2 is not a valid exponent value");
+        }
 
         // Ensure exponent is prime ...
         if (!exponent.isProbablePrime(
@@ -60,7 +65,7 @@ public class PrivateKey extends Key {
                 secretExponent = exponent.modInverse(a.subtract(BigInteger.ONE).multiply(b.subtract(BigInteger.ONE)));
                 done = true;
             } catch (ArithmeticException ex) {
-                System.out.printf("\n****\nExponent not invertible - choosing another value ...\n*****\n");
+                System.out.println("********** Exponent not invertible - choosing another value ...");
             }
         }
     }
@@ -95,9 +100,7 @@ public class PrivateKey extends Key {
      * Definitely invalidate the privateKey object.
      */
     public void invalidate() {
-         secretExponent = null;
+        secretExponent = null;
     }
-    
-    
 
 }

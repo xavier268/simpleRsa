@@ -35,7 +35,7 @@ public class RSATest {
 
     @Before
     public void setUp() {
-        s = new PrivateKey(100, new BigInteger("19"));
+        s = new PrivateKey(100, new BigInteger("5"));
         p = s.getPublicKey();
     }
 
@@ -54,15 +54,15 @@ public class RSATest {
 
     @Test
     /**
-     * Decrypt-encrypt will fail if input is onot greater or equal to 0
-     * and strictly smaller than public modulus.
+     * Decrypt-encrypt will fail if input is onot greater or equal to 0 and
+     * strictly smaller than public modulus.
      */
     public void decryptEncryptNegative() {
 
         BigInteger m = new BigInteger("-321");
         BigInteger c = s.decrypt(m);
         assertNotEquals(m, p.encrypt(c));
-        
+
     }
 
     @Test
@@ -78,10 +78,15 @@ public class RSATest {
         assertFalse(p.verify(signature.add(BigInteger.TEN), message));
         assertFalse(p.verify(signature, message + "x"));
     }
-    
-    @Test ( expected = RuntimeException.class)
+
+    @Test(expected = RuntimeException.class)
     public void nonPrimeExponent() {
         PrivateKey sec = new PrivateKey(50, BigInteger.TEN);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void exponentEquals2() {
+        PrivateKey sec = new PrivateKey(50, new BigInteger("2"));
     }
 
 }
