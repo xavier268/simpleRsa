@@ -39,8 +39,8 @@ public class PrivateKey extends Key {
         BigInteger a;
         BigInteger b;
 
-        if (exponent.equals(new BigInteger("2"))) {
-            throw new RuntimeException("2 is not a valid exponent value");
+        if (exponent.compareTo(new BigInteger("3")) <= 0) {
+            throw new RuntimeException("Exponent should be bigger or equal to 3");
         }
 
         // Ensure exponent is prime ...
