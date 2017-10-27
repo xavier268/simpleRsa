@@ -45,6 +45,11 @@ public class RSATest {
     @After
     public void tearDown() {
     }
+    
+    @Test
+    public void secretKeyValidity() {
+        assertTrue(s.isValid());
+    }
 
     @Test
     public void encryptDecrypt() {
@@ -93,15 +98,30 @@ public class RSATest {
     }
 
     @Test
-    public void saveKeys() throws IOException {
+    public void saveLoadKeys() throws IOException {
 
         Files.deleteIfExists(Paths.get("test.pub"));
         System.out.printf("\n-----Saved %s", p.save("test.pub"));
+        PublicKey pp = PublicKey.load("test.pub");
+        assertEquals(pp.compareTo(p),0);
+        
+        
         Files.deleteIfExists(Paths.get("test.sec"));
         System.out.printf("\n-----Saved %s", s.save("test.sec"));
+        PrivateKey ss = PrivateKey.load("test.sec");
+        assertEquals(ss.compareTo(s),0);
+        
+        // The privateKey file can also be read as a publicKey file.
+        pp = PublicKey.load("test.sec");
+        assertEquals(pp.compareTo(p),0);
         
         System.out.println();
 
+    }
+    
+    @Test (expected = IOException.class)
+    public void loadInvalidPrivateKey() throws IOException {        
+        PrivateKey.load("invalid.sec");        
     }
 
 }

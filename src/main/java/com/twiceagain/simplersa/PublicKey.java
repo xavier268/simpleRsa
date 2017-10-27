@@ -5,22 +5,20 @@
  */
 package com.twiceagain.simplersa;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.Format;
+import java.util.List;
 
 /**
  * PublicKey can be shared. It can be applied to any message (BigInteger).
  *
  * @author xavier
  */
-public class PublicKey extends Key {
+public class PublicKey extends Key implements Comparable<PublicKey> {
 
     public PublicKey(BigInteger exponent, BigInteger pubKey) {
         this.pubKey = pubKey;
@@ -53,13 +51,40 @@ public class PublicKey extends Key {
     public String save(String filename) throws IOException {
         Path p = Paths.get(filename);
         if (Files.exists(p)) {
-            throw new IOException("You cannot save to " 
-                    + p.toAbsolutePath() 
+            throw new IOException("You cannot save to "
+                    + p.toAbsolutePath()
                     + " because file already exists.");
         }
         String s = exponent.toString() + "\n" + pubKey.toString() + "\n";
-        Files.write(p,s.getBytes(), StandardOpenOption.CREATE);
+        Files.write(p, s.getBytes(), StandardOpenOption.CREATE);
         return p.toAbsolutePath().toString();
+    }
+
+    public static PublicKey load(String filename) throws IOException {
+        Path p = Paths.get(filename);
+        List<String> lines = Files.readAllLines(p);
+        if (lines.size() < 2) {
+            throw new IOException("Expected at least 2 lines to read ?!");
+        }
+        return new PublicKey(new BigInteger(lines.get(0)), new BigInteger(lines.get(1)));
+    }
+
+    /**
+     * Compares two public keys.
+     * @param o
+     * @return 
+     */
+    @Override
+    public int compareTo(PublicKey o) {
+        if (o == null) {
+            return 1;
+        }
+        int c = exponent.compareTo(o.exponent);
+        if (c != 0) {
+            return c;
+        }
+        c = pubKey.compareTo(o.pubKey);
+        return c;
     }
 
 }

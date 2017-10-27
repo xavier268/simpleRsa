@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Random;
  *
  * @author xavier
  */
-public class PrivateKey extends Key {
+public class PrivateKey extends Key implements Comparable<PrivateKey> {
 
     /**
      * Secret factors.
@@ -31,6 +32,19 @@ public class PrivateKey extends Key {
     private final Random rnd = new Random();
 
     private BigInteger secretExponent;
+
+    /**
+     * protected contructor used when loading from file.
+     *
+     * @param secretExponent
+     * @param exponent
+     * @param pubKey
+     */
+    private PrivateKey(BigInteger secretExponent, BigInteger exponent, BigInteger pubKey) {
+        this.secretExponent = secretExponent;
+        this.exponent = exponent;
+        this.pubKey = pubKey;
+    }
 
     /**
      * Generate a new private key.
@@ -129,4 +143,48 @@ public class PrivateKey extends Key {
         return p.toAbsolutePath().toString();
     }
 
+    @Override
+    public int compareTo(PrivateKey o) {
+        if (o == null) {
+            return 1;
+        }
+        int c = exponent.compareTo(o.exponent);
+        if (c != 0) {
+            return c;
+        }
+        c = pubKey.compareTo(o.pubKey);
+        if (c != 0) {
+            return c;
+        }
+
+        c = secretExponent.compareTo(o.secretExponent);
+        return c;
+    }
+
+    public static PrivateKey load(String filename) throws IOException {
+        Path p = Paths.get(filename);
+        List<String> lines = Files.readAllLines(p);
+        if (lines.size() < 3) {
+            throw new IOException("Expected at least 2 lines to read ?!");
+        }
+        PrivateKey ss = new PrivateKey(
+                new BigInteger(lines.get(2)),
+                new BigInteger(lines.get(0)),
+                new BigInteger(lines.get(1)));
+        
+        if(! ss.isValid()) throw new IOException("Private key read from file is invalid.");
+        
+        return ss;
+
+    }
+
+    /**
+     * Test validity of privateKey, doing a single decrypt/encrypt test.
+     *
+     * @return
+     */
+    public boolean isValid() {
+        BigInteger tt = new BigInteger("789456123").mod(pubKey);
+        return (getPublicKey().encrypt(decrypt(tt)).compareTo(tt) == 0);
+    }
 }
