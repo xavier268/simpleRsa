@@ -19,12 +19,12 @@ import java.util.List;
  * @author xavier
  */
 public class PublicKey extends Key implements Comparable<PublicKey> {
-    
+
     public PublicKey(BigInteger exponent, BigInteger modulus) {
         this.modulus = modulus;
         this.exponent = exponent;
     }
-    
+
     public BigInteger encrypt(BigInteger input) {
         if (input.compareTo(input.mod(modulus)) != 0) {
             LOG.warning("Input is outside of modulus range and will be truncated ! "
@@ -63,7 +63,7 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
         Files.write(p, s.getBytes(), StandardOpenOption.CREATE);
         return p.toAbsolutePath().toString();
     }
-    
+
     public static PublicKey load(String filename) throws IOException {
         Path p = Paths.get(filename);
         List<String> lines = Files.readAllLines(p);
@@ -91,5 +91,5 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
         c = modulus.compareTo(o.modulus);
         return c;
     }
-    
+
 }

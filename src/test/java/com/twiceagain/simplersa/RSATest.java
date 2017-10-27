@@ -42,14 +42,14 @@ public class RSATest {
 
     @Before
     public void setUp() {
-        s = new PrivateKey(100, new BigInteger("5"),null);
+        s = new PrivateKey(100, new BigInteger("5"), null);
         p = s.getPublicKey();
     }
 
     @After
     public void tearDown() {
     }
-    
+
     @Test
     public void secretKeyValidity() {
         assertTrue(s.isValid());
@@ -93,12 +93,17 @@ public class RSATest {
 
     @Test(expected = RuntimeException.class)
     public void nonPrimeExponent() {
-        PrivateKey sec = new PrivateKey(50, BigInteger.TEN,null);
+        PrivateKey sec = new PrivateKey(50, BigInteger.TEN, null);
     }
 
     @Test(expected = RuntimeException.class)
     public void exponentEquals2() {
-        PrivateKey sec = new PrivateKey(50, new BigInteger("2"),null);
+        PrivateKey sec = new PrivateKey(50, new BigInteger("2"), null);
+    }
+
+    @Test
+    public void exponentEquals3() {
+        PrivateKey sec = new PrivateKey(50, new BigInteger("3"), null);
     }
 
     @Test
@@ -107,23 +112,22 @@ public class RSATest {
         Files.deleteIfExists(Paths.get("test.pub"));
         LOG.log(Level.INFO, "Saved {0}", p.save("test.pub"));
         PublicKey pp = PublicKey.load("test.pub");
-        assertEquals(pp.compareTo(p),0);
-        
-        
+        assertEquals(pp.compareTo(p), 0);
+
         Files.deleteIfExists(Paths.get("test.sec"));
         LOG.log(Level.INFO, "Saved %s{0}", s.save("test.sec"));
         PrivateKey ss = PrivateKey.load("test.sec");
-        assertEquals(ss.compareTo(s),0);
-        
+        assertEquals(ss.compareTo(s), 0);
+
         // The privateKey file can also be read as a publicKey file.
         pp = PublicKey.load("test.sec");
-        assertEquals(pp.compareTo(p),0);
+        assertEquals(pp.compareTo(p), 0);
 
     }
-    
-    @Test (expected = IOException.class)
-    public void loadInvalidPrivateKey() throws IOException {        
-        PrivateKey.load("invalid.sec");        
+
+    @Test(expected = IOException.class)
+    public void loadInvalidPrivateKey() throws IOException {
+        PrivateKey.load("invalid.sec");
     }
 
 }
