@@ -84,7 +84,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
                 secretExponent = exponent.modInverse(a.subtract(BigInteger.ONE).multiply(b.subtract(BigInteger.ONE)));
                 done = true;
             } catch (ArithmeticException ex) {
-                System.out.println("********** Exponent not invertible - choosing another value ...");
+                LOG.info("********** Exponent not invertible - choosing another value ...");
             }
         }
     }

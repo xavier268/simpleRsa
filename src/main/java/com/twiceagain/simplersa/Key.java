@@ -8,6 +8,7 @@ package com.twiceagain.simplersa;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +22,8 @@ public abstract class Key {
     protected BigInteger exponent;
     protected BigInteger pubKey;
 
+    protected static final Logger LOG = Logger.getLogger(Key.class.getName());
+
     public static final String DIGEST_ALGO = "SHA-256";
 
     private MessageDigest md;
@@ -30,9 +33,9 @@ public abstract class Key {
             md = MessageDigest.getInstance(DIGEST_ALGO);
         } catch (NoSuchAlgorithmException ex) {
             // Should never be thrown, unless jvm does not provides message digest.
-            System.out.printf("\nYour jvm implementation is not providing "
-                    + DIGEST_ALGO + " message digest ...\n");
-            Logger.getLogger(Key.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, "\nYour jvm implementation is not providing " + DIGEST_ALGO
+                    + " message digest ...\n");
+            LOG.log(Level.SEVERE, ex.getLocalizedMessage());
         }
     }
 
