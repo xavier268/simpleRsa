@@ -22,15 +22,6 @@ import java.util.Random;
  */
 public class PrivateKey extends Key implements Comparable<PrivateKey> {
 
-    /**
-     * Secret factors.
-     */
-    /**
-     * Random generator - this is a sensitive matter if you are thinking of
-     * doing serious encryption.
-     */
-    private final Random rnd = new Random();
-
     private BigInteger secretExponent;
 
     /**
@@ -52,11 +43,14 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
      * @param nbBits
      * @param exponent - should be prime, greater or equals to 3, or will throw
      * Runtime Exception.
+     * @param randomGenerator provide your own random generator, or null to use default.
      */
-    public PrivateKey(int nbBits, BigInteger exponent) {
+    public PrivateKey(int nbBits, BigInteger exponent, Random randomGenerator) {
 
         BigInteger a;
         BigInteger b;
+        Random rnd = randomGenerator;
+        if(rnd == null) rnd = new Random();
 
         if (exponent.compareTo(new BigInteger("3")) <= 0) {
             throw new RuntimeException("Exponent should be bigger or equal to 3");
@@ -74,6 +68,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
         boolean done = false;
         while (!done) {
             try {
+                
                 a = BigInteger.probablePrime(nbBits, rnd);
                 b = BigInteger.probablePrime(nbBits, rnd);
                 this.exponent = exponent;

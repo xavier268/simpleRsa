@@ -42,7 +42,7 @@ public class RSATest {
 
     @Before
     public void setUp() {
-        s = new PrivateKey(100, new BigInteger("5"));
+        s = new PrivateKey(100, new BigInteger("5"),null);
         p = s.getPublicKey();
     }
 
@@ -93,12 +93,12 @@ public class RSATest {
 
     @Test(expected = RuntimeException.class)
     public void nonPrimeExponent() {
-        PrivateKey sec = new PrivateKey(50, BigInteger.TEN);
+        PrivateKey sec = new PrivateKey(50, BigInteger.TEN,null);
     }
 
     @Test(expected = RuntimeException.class)
     public void exponentEquals2() {
-        PrivateKey sec = new PrivateKey(50, new BigInteger("2"));
+        PrivateKey sec = new PrivateKey(50, new BigInteger("2"),null);
     }
 
     @Test
