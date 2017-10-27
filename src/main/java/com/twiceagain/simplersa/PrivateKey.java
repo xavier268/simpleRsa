@@ -6,7 +6,6 @@
 package com.twiceagain.simplersa;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -17,8 +16,13 @@ import java.util.Random;
  */
 public class PrivateKey extends Key {
 
-    private BigInteger a;
-    private BigInteger b;
+    /**
+     * Secret factors.
+     */
+    /**
+     * Random generator - this is a sensitive matter if you are thinking of
+     * doing serious encryption.
+     */
     private final Random rnd = new Random();
 
     private BigInteger secretExponent;
@@ -27,19 +31,22 @@ public class PrivateKey extends Key {
      * Generate a new private key.
      *
      * @param nbBits
-     * @param exponent - should be prime.
+     * @param exponent - should be prime, or throw Runtime Exception.
      */
     public PrivateKey(int nbBits, BigInteger exponent) {
 
-        // Verify exponent is prime ...
-        if (!exponent.isProbablePrime(20)) {
+        BigInteger a;
+        BigInteger b;
+
+        // Ensure exponent is prime ...
+        if (!exponent.isProbablePrime(
+                20)) {
             throw new RuntimeException(
                     "You must use a prime number as exponent. "
                     + exponent.toString()
                     + " is not a prime number.");
         }
-        
-        
+
         boolean done = false;
         while (!done) {
             try {
@@ -83,5 +90,14 @@ public class PrivateKey extends Key {
         return decrypt(d);
 
     }
+
+    /**
+     * Definitely invalidate the privateKey object.
+     */
+    public void invalidate() {
+         secretExponent = null;
+    }
+    
+    
 
 }

@@ -6,10 +6,9 @@
 package com.twiceagain.simplersa;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 /**
- * PublicKey can be shared. It can be aplied to any message (BigInteger).
+ * PublicKey can be shared. It can be applied to any message (BigInteger).
  *
  * @author xavier
  */

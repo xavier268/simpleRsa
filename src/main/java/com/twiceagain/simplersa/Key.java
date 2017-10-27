@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Abstract class, common to public and private keys.
  * @author xavier
  */
 public abstract class Key {
@@ -31,7 +31,7 @@ public abstract class Key {
     }
     
     /**
-     * BigInteger derived from the hash, that is in the mod interval.
+     * Compute the hash as a BigInteger modulus.
      * @param message
      * @return 
      */
