@@ -38,12 +38,12 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
      *
      * @param secretExponent
      * @param exponent
-     * @param pubKey
+     * @param modulus
      */
-    private PrivateKey(BigInteger secretExponent, BigInteger exponent, BigInteger pubKey) {
+    private PrivateKey(BigInteger secretExponent, BigInteger exponent, BigInteger modulus) {
         this.secretExponent = secretExponent;
         this.exponent = exponent;
-        this.pubKey = pubKey;
+        this.modulus = modulus;
     }
 
     /**
@@ -77,7 +77,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
                 a = BigInteger.probablePrime(nbBits, rnd);
                 b = BigInteger.probablePrime(nbBits, rnd);
                 this.exponent = exponent;
-                this.pubKey = a.multiply(b);
+                this.modulus = a.multiply(b);
                 // now, compute the inverse of the exponent modulo a-1 x b-1
                 // It is sometimes impossible to compute the inverse, if exponent is not invertible in that field. 
                 // In such case, we should modify the factors, and try again ...            
@@ -95,12 +95,12 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
      * @return
      */
     public PublicKey getPublicKey() {
-        return new PublicKey(exponent, pubKey);
+        return new PublicKey(exponent, modulus);
 
     }
 
     public BigInteger decrypt(BigInteger input) {
-        return input.modPow(secretExponent, pubKey);
+        return input.modPow(secretExponent, modulus);
     }
 
     /**
@@ -137,7 +137,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
                     + " because file already exists.");
         }
         String s = exponent.toString() + "\n"
-                + pubKey.toString() + "\n"
+                + modulus.toString() + "\n"
                 + secretExponent.toString() + "\n";
         Files.write(p, s.getBytes(), StandardOpenOption.CREATE);
         return p.toAbsolutePath().toString();
@@ -152,7 +152,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
         if (c != 0) {
             return c;
         }
-        c = pubKey.compareTo(o.pubKey);
+        c = modulus.compareTo(o.modulus);
         if (c != 0) {
             return c;
         }
@@ -184,7 +184,7 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
      * @return
      */
     public boolean isValid() {
-        BigInteger tt = new BigInteger("789456123").mod(pubKey);
+        BigInteger tt = new BigInteger("789456123").mod(modulus);
         return (getPublicKey().encrypt(decrypt(tt)).compareTo(tt) == 0);
     }
 }

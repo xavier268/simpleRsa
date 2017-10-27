@@ -20,13 +20,13 @@ import java.util.List;
  */
 public class PublicKey extends Key implements Comparable<PublicKey> {
 
-    public PublicKey(BigInteger exponent, BigInteger pubKey) {
-        this.pubKey = pubKey;
+    public PublicKey(BigInteger exponent, BigInteger modulus) {
+        this.modulus = modulus;
         this.exponent = exponent;
     }
 
     public BigInteger encrypt(BigInteger input) {
-        return input.modPow(exponent, pubKey);
+        return input.modPow(exponent, modulus);
     }
 
     /**
@@ -36,7 +36,7 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
      * @param message
      * @return true if signature is valid.
      */
-    public boolean verify(BigInteger signature, String message) {
+    public boolean verifySignature(BigInteger signature, String message) {
         BigInteger d = digest(message);
         return d.equals(encrypt(signature));
     }
@@ -55,7 +55,7 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
                     + p.toAbsolutePath()
                     + " because file already exists.");
         }
-        String s = exponent.toString() + "\n" + pubKey.toString() + "\n";
+        String s = exponent.toString() + "\n" + modulus.toString() + "\n";
         Files.write(p, s.getBytes(), StandardOpenOption.CREATE);
         return p.toAbsolutePath().toString();
     }
@@ -83,7 +83,7 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
         if (c != 0) {
             return c;
         }
-        c = pubKey.compareTo(o.pubKey);
+        c = modulus.compareTo(o.modulus);
         return c;
     }
 

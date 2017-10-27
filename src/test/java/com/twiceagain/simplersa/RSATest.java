@@ -85,10 +85,10 @@ public class RSATest {
 
         BigInteger signature = s.sign(message);
 
-        assertTrue(p.verify(signature, message));
+        assertTrue(p.verifySignature(signature, message));
 
-        assertFalse(p.verify(signature.add(BigInteger.TEN), message));
-        assertFalse(p.verify(signature, message + "x"));
+        assertFalse(p.verifySignature(signature.add(BigInteger.TEN), message));
+        assertFalse(p.verifySignature(signature, message + "x"));
     }
 
     @Test(expected = RuntimeException.class)

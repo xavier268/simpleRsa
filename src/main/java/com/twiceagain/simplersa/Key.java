@@ -8,7 +8,6 @@ package com.twiceagain.simplersa;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +19,7 @@ import java.util.logging.Logger;
 public abstract class Key {
 
     protected BigInteger exponent;
-    protected BigInteger pubKey;
+    protected BigInteger modulus;
 
     protected static final Logger LOG = Logger.getLogger(Key.class.getName());
 
@@ -48,6 +47,16 @@ public abstract class Key {
     protected BigInteger digest(String message) {
         byte[] digest = md.digest(message.getBytes());
         BigInteger bd = new BigInteger(digest);
-        return bd.mod(pubKey);
+        return bd.mod(modulus);
     }
+
+    public BigInteger getExponent() {
+        return exponent;
+    }
+
+    public BigInteger getModulus() {
+        return modulus;
+    }
+    
+    
 }
