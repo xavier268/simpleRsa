@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -27,6 +28,7 @@ public class PerformanceTest {
     private static final BigInteger THREE = new BigInteger("3");
 
     @Test
+    @Ignore // Comment this annotation to run the performance test
     public void speedtest() {
 
         Random rdm = new Random(0);

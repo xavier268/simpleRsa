@@ -27,6 +27,7 @@ running on netbeans, inside a virtualbox, on top of a windows 10 desktop host ..
 
 <img src="perf.png">
 
-**See** the unit tests as an example on how to use.
+## Notes
 
-**note** : File format is different fron the openssh rsa file format
+* See the unit tests as an example on how to use.
+* File format is different fron the openssh rsa file format.
