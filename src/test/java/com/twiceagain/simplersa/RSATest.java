@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,6 +23,8 @@ import static org.junit.Assert.*;
  * @author xavier
  */
 public class RSATest {
+
+    private static final Logger LOG = Logger.getLogger(RSATest.class.getName());
 
     PrivateKey s;
     PublicKey p;
@@ -101,21 +105,19 @@ public class RSATest {
     public void saveLoadKeys() throws IOException {
 
         Files.deleteIfExists(Paths.get("test.pub"));
-        System.out.printf("\n-----Saved %s", p.save("test.pub"));
+        LOG.log(Level.INFO, "Saved {0}", p.save("test.pub"));
         PublicKey pp = PublicKey.load("test.pub");
         assertEquals(pp.compareTo(p),0);
         
         
         Files.deleteIfExists(Paths.get("test.sec"));
-        System.out.printf("\n-----Saved %s", s.save("test.sec"));
+        LOG.log(Level.INFO, "Saved %s{0}", s.save("test.sec"));
         PrivateKey ss = PrivateKey.load("test.sec");
         assertEquals(ss.compareTo(s),0);
         
         // The privateKey file can also be read as a publicKey file.
         pp = PublicKey.load("test.sec");
         assertEquals(pp.compareTo(p),0);
-        
-        System.out.println();
 
     }
     
