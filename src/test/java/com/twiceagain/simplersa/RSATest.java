@@ -35,7 +35,7 @@ public class RSATest {
 
     @Before
     public void setUp() {
-        s = new PrivateKey(100, new BigInteger("13"));
+        s = new PrivateKey(100, new BigInteger("19"));
         p = s.getPublicKey();
     }
 
@@ -59,7 +59,7 @@ public class RSATest {
      */
     public void decryptEncryptNegative() {
 
-        BigInteger m = new BigInteger("-321654654654");
+        BigInteger m = new BigInteger("-321");
         BigInteger c = s.decrypt(m);
         assertNotEquals(m, p.encrypt(c));
         
@@ -77,6 +77,11 @@ public class RSATest {
 
         assertFalse(p.verify(signature.add(BigInteger.TEN), message));
         assertFalse(p.verify(signature, message + "x"));
+    }
+    
+    @Test ( expected = RuntimeException.class)
+    public void nonPrimeExponent() {
+        PrivateKey sec = new PrivateKey(50, BigInteger.TEN);
     }
 
 }

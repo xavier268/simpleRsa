@@ -27,11 +27,20 @@ public class PrivateKey extends Key {
      * Generate a new private key.
      *
      * @param nbBits
-     * @param exponent
+     * @param exponent - should be prime.
      */
     public PrivateKey(int nbBits, BigInteger exponent) {
-        boolean done = false;
 
+        // Verify exponent is prime ...
+        if (!exponent.isProbablePrime(20)) {
+            throw new RuntimeException(
+                    "You must use a prime number as exponent. "
+                    + exponent.toString()
+                    + " is not a prime number.");
+        }
+        
+        
+        boolean done = false;
         while (!done) {
             try {
                 a = BigInteger.probablePrime(nbBits, rnd);
