@@ -29,6 +29,6 @@ running on netbeans, inside a virtualbox, on top of a windows 10 desktop host ..
 
 ## Notes
 
-* Number of bits here refer to the bits of ecah prime factor - the key itself is twice as long.
+* Number of bits here refer to the bits of each prime factor - the key itself is twice as long.
 * See the unit tests as an example on how to use.
 * File format is different fron the openssh rsa file format.
