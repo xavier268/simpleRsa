@@ -1,4 +1,4 @@
-# simpleRsa
+# Simple Rsa
 A simple, unlimited strength, cryptographic RSA implementation in java, 
 using only the java standard librairy.
 
