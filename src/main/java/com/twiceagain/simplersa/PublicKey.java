@@ -27,7 +27,8 @@ public class PublicKey extends Key implements Comparable<PublicKey> {
     
     public BigInteger encrypt(BigInteger input) {
         if (input.compareTo(input.mod(modulus)) != 0) {
-            LOG.warning("Input will be truncated ! You will NOT get back the same value upon decryption.");
+            LOG.warning("Input is outside of modulus range and will be truncated ! "
+                    + "You will NOT get back the same value upon decryption.");
         }
         return input.modPow(exponent, modulus);
     }

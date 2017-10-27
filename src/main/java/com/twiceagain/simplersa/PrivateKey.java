@@ -99,7 +99,8 @@ public class PrivateKey extends Key implements Comparable<PrivateKey> {
 
     public BigInteger decrypt(BigInteger input) {
         if (input.compareTo(input.mod(modulus)) != 0) {
-            LOG.warning("Input will be truncated ! You will NOT get the same value upon encryption.");
+            LOG.warning("Input is outisde of modulus range and will be truncated ! "
+                    + "You will NOT get the same value upon encryption.");
         }
         return input.modPow(secretExponent, modulus);
     }
