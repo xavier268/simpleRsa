@@ -20,7 +20,7 @@ import java.util.Random;
  *
  * @author xavier
  */
-public class PrivateKey extends Key implements Comparable<PrivateKey> {
+public final class PrivateKey extends Key implements Comparable<PrivateKey> {
 
     /**
      * This is the most sensitive component.
